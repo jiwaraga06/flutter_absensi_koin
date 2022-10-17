@@ -12,3 +12,14 @@ class SplashLoaded extends LoginState {}
 class LoginLoading extends LoginState {}
 
 class LoginLoaded extends LoginState {}
+
+class LoginMessage extends LoginState {
+  final String? message;
+
+  LoginMessage({this.message});
+}
+class AuthStatus extends LoginState {
+  final String? message;
+
+  AuthStatus({this.message});
+}

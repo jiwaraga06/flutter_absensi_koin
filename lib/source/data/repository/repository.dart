@@ -11,4 +11,14 @@ class MyRepository {
     final json = await myNetwork!.cekKoin(cardID);
     return json;
   }
+
+  Future tukarKoin(cardID, shopName) async {
+    final json = await myNetwork!.tukar(cardID, shopName);
+    return json;
+  }
+
+  Future login(userName, userPass) async {
+    final json = await myNetwork!.login(userName, userPass);
+    return json;
+  }
 }

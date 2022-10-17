@@ -11,8 +11,9 @@ class ProsesTransaksiLoaded extends ProsesTransaksiState {
   final dynamic result;
   final String? statusKoin;
   final String? tgl_penukaran;
+  final int? status;
 
-  ProsesTransaksiLoaded({this.result, this.statusKoin, this.tgl_penukaran});
+  ProsesTransaksiLoaded({this.result, this.statusKoin, this.tgl_penukaran, this.status});
 }
 
 class ProsesTransaksiMessage extends ProsesTransaksiState {

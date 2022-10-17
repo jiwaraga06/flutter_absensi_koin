@@ -1,4 +1,6 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_absen_koin/source/data/cubit/login_cubit.dart';
 import 'package:flutter_absen_koin/source/data/cubit/proses_transaksi_cubit.dart';
 import 'package:flutter_absen_koin/source/pages/home/proses_transaksi.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,18 +19,32 @@ class _TransaksiState extends State<Transaksi> {
   TextEditingController controllerBarcode = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    // BlocProvider.of<ProsesTransaksiCubit>(context).compareTanggal(202009016);
+    BlocProvider.of<LoginCubit>(context).getShopName();
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Color(0XFFFF884B),
-        title: Text(
-          "Kantin / Koperasi",
-          style: GoogleFonts.lato(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w600),
+        title: BlocBuilder<LoginCubit, LoginState>(
+          builder: (context, state) {
+            if (state is AuthStatus == false) {
+              return Text("");
+            }
+            var userName = (state as AuthStatus).message;
+            if (userName!.isEmpty) {
+              return Text("");
+            }
+            return Text(
+              userName,
+              style: GoogleFonts.lato(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w600),
+            );
+          },
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              BlocProvider.of<LoginCubit>(context).keluar(context);
+              BlocProvider.of<ProsesTransaksiCubit>(context).clearData();
+            },
             icon: Icon(
               FontAwesomeIcons.circleXmark,
               color: Colors.black,
@@ -39,32 +55,29 @@ class _TransaksiState extends State<Transaksi> {
       ),
       body: ListView(
         children: [
-          const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Text(
-                //   "Scan Barcode Karyawan",
-                //   style: GoogleFonts.lato(color: Colors.black, fontSize: 25, fontWeight: FontWeight.w600),
-                // ),
-                // const SizedBox(height: 8),
                 SizedBox(
                   width: 350,
                   child: TextFormField(
                     textAlign: TextAlign.center,
                     controller: controllerBarcode,
                     autofocus: true,
-                    // cursorColor:Colors.white,
+                    cursorColor: Colors.white,
                     style: const TextStyle(
                       fontSize: 20,
-                      // color: Colors.white,
+                      color: Colors.white,
                     ),
                     decoration: const InputDecoration(border: InputBorder.none),
-                    onChanged: (value) {
+                    onChanged: (value) async {
                       if (value.length >= 9) {
-                        BlocProvider.of<ProsesTransaksiCubit>(context).compareTanggal(controllerBarcode.text);
+                        // BlocProvider.of<ProsesTransaksiCubit>(context).compareTanggal(controllerBarcode.text);
+                        BlocProvider.of<ProsesTransaksiCubit>(context).tukarKoin(controllerBarcode.text, "Kantin");
+                        await Future.delayed(Duration(seconds: 1));
+                        controllerBarcode.clear();
                       }
                     },
                   ),
@@ -94,6 +107,7 @@ class _TransaksiState extends State<Transaksi> {
                       return Container();
                     }
                     var statusKoin = (state as ProsesTransaksiLoaded).statusKoin;
+                    var status = (state as ProsesTransaksiLoaded).status;
                     var tanggal_penukaran = (state as ProsesTransaksiLoaded).tgl_penukaran;
                     return ticket(
                       data['FullName'],
@@ -104,6 +118,7 @@ class _TransaksiState extends State<Transaksi> {
                       statusKoin,
                       data['CardIdNo'],
                       data['shift'],
+                      status,
                     );
                   },
                 ),
@@ -115,7 +130,7 @@ class _TransaksiState extends State<Transaksi> {
     );
   }
 
-  Widget ticket(nama, koin_makan, masa_berlaku, masa_berlaku_akhir, tanggal_penukaran, status_berlaku, barcode, shift) {
+  Widget ticket(nama, koin_makan, masa_berlaku, masa_berlaku_akhir, tanggal_penukaran, status_berlaku, barcode, shift, status) {
     return TicketWidget(
       width: 450,
       height: 450,
@@ -130,12 +145,15 @@ class _TransaksiState extends State<Transaksi> {
             height: 40.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30.0),
-              border: Border.all(width: 1.5, color: Colors.green),
+              border: Border.all(
+                width: 1.5,
+                color: status == 1 ? Colors.green : Colors.black,
+              ),
             ),
             child: Center(
               child: Text(
                 status_berlaku,
-                style: TextStyle(color: Colors.green, fontWeight: FontWeight.w600, fontSize: 17),
+                style: TextStyle(color: status == 1 ? Colors.green : Colors.black, fontWeight: FontWeight.w600, fontSize: 17),
               ),
             ),
           ),
@@ -153,7 +171,7 @@ class _TransaksiState extends State<Transaksi> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-              Table(
+                Table(
                   columnWidths: const {
                     0: FixedColumnWidth(300),
                   },
@@ -169,9 +187,11 @@ class _TransaksiState extends State<Transaksi> {
                       ),
                     ]),
                     TableRow(children: [
-                      Text(
+                      AutoSizeText(
                         nama,
-                       style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
+                        maxLines: 2,
+                        minFontSize: 14,
+                        style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                       Text(
                         barcode,
@@ -205,7 +225,7 @@ class _TransaksiState extends State<Transaksi> {
                       "Masa Berlaku",
                       style: TextStyle(color: Colors.grey, fontSize: 15),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 6),
                     Table(
                       columnWidths: const {
                         0: FixedColumnWidth(100),
@@ -257,7 +277,7 @@ class _TransaksiState extends State<Transaksi> {
                     TableRow(children: [
                       Text(
                         tanggal_penukaran,
-                       style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
+                        style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                       Text(
                         shift,
@@ -276,7 +296,7 @@ class _TransaksiState extends State<Transaksi> {
             children: [
               Text(
                 "Copyright PT SIPATEX PUTRI LESTARI",
-                style: TextStyle(color: Colors.grey, fontSize: 15),
+                style: TextStyle(color: Colors.grey.shade400, fontSize: 15),
               ),
             ],
           ),
