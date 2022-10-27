@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_absen_koin/source/data/repository/repository.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'proses_transaksi_state.dart';
 
@@ -14,7 +15,7 @@ class ProsesTransaksiCubit extends Cubit<ProsesTransaksiState> {
   void compareTanggal(cardID, pesan, crID) async {
     emit(ProsesTransaksiLoading());
     await Future.delayed(Duration(milliseconds: 650));
-    myRepository!.cekKoin(cardID).then((value) async{
+    myRepository!.cekKoin(cardID).then((value) async {
       var json = jsonDecode(value.body);
       print(json);
       if (json.length != 0) {
@@ -57,26 +58,35 @@ class ProsesTransaksiCubit extends Cubit<ProsesTransaksiState> {
     });
   }
 
-  void tukarKoin(cardID, shopName) async {
+  void tukarKoin(cardID) async {
     await Future.delayed(Duration(seconds: 1));
-    myRepository!.tukarKoin(cardID, shopName).then((value) {
-      var jsonTukar = jsonDecode(value.body);
-      print("TUKAR KOIN :  $jsonTukar");
-      if (jsonTukar[0]['crID'] == 1) {
-        compareTanggal(cardID, "Koin Bisa di Gunakan", jsonTukar[0]['crID']);
-      } else if (jsonTukar[0]['crID'] == 2) {
-        compareTanggal(cardID, "Koin Sudah di Pakai", jsonTukar[0]['crID']);
-      } else if (jsonTukar[0]['crID'] == 3) {
-        compareTanggal(cardID, "Koin Belum Bisa di Pakai", jsonTukar[0]['crID']);
-      } else if (jsonTukar[0]['crID'] == 4) {
-        compareTanggal(cardID, "Koin Kadaluwarsa", jsonTukar[0]['crID']);
-      } else if (jsonTukar[0]['crID'] == 9) {
-        compareTanggal(cardID, "Karyawan Belum Absen", jsonTukar[0]['crID']);
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var shopID = pref.getInt("ShopID");
+    print("SHOP ID: " + shopID.toString());
+    myRepository!.getShift(cardID).then((value) {
+      var json = jsonDecode(value.body);
+      var kodeShfit = json[0]['KodeShift'];
+      if (json.length != 0) {
+        myRepository!.tukarKoin(cardID, shopID, kodeShfit).then((value) {
+          var jsonTukar = jsonDecode(value.body);
+          print("TUKAR KOIN :  $jsonTukar");
+          if (jsonTukar[0]['crID'] == 1) {
+            compareTanggal(cardID, "Koin Bisa di Gunakan", jsonTukar[0]['crID']);
+          } else if (jsonTukar[0]['crID'] == 2) {
+            compareTanggal(cardID, "Koin Sudah di Pakai", jsonTukar[0]['crID']);
+          } else if (jsonTukar[0]['crID'] == 3) {
+            compareTanggal(cardID, "Koin Belum Bisa di Pakai", jsonTukar[0]['crID']);
+          } else if (jsonTukar[0]['crID'] == 4) {
+            compareTanggal(cardID, "Koin Kadaluwarsa", jsonTukar[0]['crID']);
+          } else if (jsonTukar[0]['crID'] == 9) {
+            compareTanggal(cardID, "Karyawan Belum Absen", jsonTukar[0]['crID']);
+          }
+        });
       }
     });
   }
 
   void clearData() {
-    emit(ProsesTransaksiLoaded(result: [], status: 0, statusKoin: "", tgl_penukaran: ""));
+    // emit(ProsesTransaksiLoaded(result: {}, status: 0, statusKoin: "", tgl_penukaran: ""));
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_absen_koin/source/data/api/network.dart';
 import 'package:flutter_absen_koin/source/data/cubit/koin_cubit.dart';
 import 'package:flutter_absen_koin/source/data/cubit/login_cubit.dart';
+import 'package:flutter_absen_koin/source/data/cubit/periode_cubit.dart';
 import 'package:flutter_absen_koin/source/data/cubit/proses_transaksi_cubit.dart';
 import 'package:flutter_absen_koin/source/data/repository/repository.dart';
 import 'package:flutter_absen_koin/source/router/router.dart';
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ProsesTransaksiCubit>(
           create: (loginCubit) => ProsesTransaksiCubit(myRepository: myRepository),
+        ),
+        BlocProvider<PeriodeCubit>(
+          create: (loginCubit) => PeriodeCubit(myRepository: myRepository),
         ),
       ],
       child: MaterialApp(

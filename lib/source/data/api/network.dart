@@ -15,9 +15,9 @@ class MyNetwork {
     }
   }
 
-  Future tukar(cardID, shopName) async {
+  Future tukar(cardID, shopID, shiftID) async {
     try {
-      var url = Uri.parse(MyApi.tukar(cardID, shopName));
+      var url = Uri.parse(MyApi.tukar(cardID, shopID, shiftID));
       var response = await http.post(
         url,
         headers: {'Authorization': 'Bearer ${MyApi.token()}'},
@@ -40,4 +40,30 @@ class MyNetwork {
       print("ERROR API LOGIN : $e");
     }
   }
+
+  Future getReport(outletID, tglAwal, tglAkhir) async {
+    try {
+      var url = Uri.parse(MyApi.getReport(outletID, tglAwal, tglAkhir));
+      var response = await http.get(
+        url,
+        headers: {'Authorization': 'Bearer ${MyApi.token()}'},
+      );
+      return response;
+    } catch (e) {
+      print("ERROR API Get Report : $e");
+    }
+  }
+  Future getShift(cardID) async {
+    try {
+      var url = Uri.parse(MyApi.getShift(cardID));
+      var response = await http.get(
+        url,
+        headers: {'Authorization': 'Bearer ${MyApi.token()}'},
+      );
+      return response;
+    } catch (e) {
+      print("ERROR API Get Report : $e");
+    }
+  }
+
 }

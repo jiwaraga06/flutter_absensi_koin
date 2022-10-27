@@ -19,7 +19,9 @@ class LoginCubit extends Cubit<LoginState> {
     emit(SplashLoaded());
     SharedPreferences pref = await SharedPreferences.getInstance();
     var userName = pref.getString("UserName");
+    var shopID = pref.getInt("ShopID");
     print(userName);
+    print(shopID);
     if (userName == null) {
       Navigator.pushReplacementNamed(context, LOGIN);
     } else {
@@ -32,9 +34,10 @@ class LoginCubit extends Cubit<LoginState> {
       var json = jsonDecode(value.body);
       print("API LOGIN : $json");
       if (value.statusCode == 200) {
-        if (json[0]['Result'] == 1) {
+        if (json[0]['Result'] != 0) {
           SharedPreferences pref = await SharedPreferences.getInstance();
           pref.setString("UserName", userName);
+          pref.setInt("ShopID", json[0]['Result']);
           print("Data di Temukan");
           await Future.delayed(Duration(seconds: 1));
           Navigator.pushReplacementNamed(context, TRANSAKSI);

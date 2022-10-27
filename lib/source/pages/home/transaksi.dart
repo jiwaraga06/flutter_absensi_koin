@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_absen_koin/source/data/cubit/login_cubit.dart';
 import 'package:flutter_absen_koin/source/data/cubit/proses_transaksi_cubit.dart';
 import 'package:flutter_absen_koin/source/pages/home/proses_transaksi.dart';
+import 'package:flutter_absen_koin/source/router/string.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -50,7 +51,13 @@ class _TransaksiState extends State<Transaksi> {
               color: Colors.black,
               size: 25,
             ),
-          )
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextButton(onPressed: (){
+              Navigator.pushNamed(context, PERIODE);
+            }, child: Text("Periode", style: TextStyle(color: Colors.white),)),
+          ),
         ],
       ),
       body: ListView(
@@ -69,13 +76,13 @@ class _TransaksiState extends State<Transaksi> {
                     cursorColor: Colors.white,
                     style: const TextStyle(
                       fontSize: 20,
-                      color: Colors.white,
+                      // color: Colors.white,
                     ),
                     decoration: const InputDecoration(border: InputBorder.none),
                     onChanged: (value) async {
                       if (value.length >= 9) {
                         // BlocProvider.of<ProsesTransaksiCubit>(context).compareTanggal(controllerBarcode.text);
-                        BlocProvider.of<ProsesTransaksiCubit>(context).tukarKoin(controllerBarcode.text, "Kantin");
+                        BlocProvider.of<ProsesTransaksiCubit>(context).tukarKoin(controllerBarcode.text);
                         await Future.delayed(Duration(seconds: 1));
                         controllerBarcode.clear();
                       }

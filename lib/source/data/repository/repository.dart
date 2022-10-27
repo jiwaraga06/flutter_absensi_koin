@@ -12,13 +12,23 @@ class MyRepository {
     return json;
   }
 
-  Future tukarKoin(cardID, shopName) async {
-    final json = await myNetwork!.tukar(cardID, shopName);
+  Future tukarKoin(cardID, shopID, shiftID) async {
+    final json = await myNetwork!.tukar(cardID, shopID, shiftID);
     return json;
   }
 
   Future login(userName, userPass) async {
     final json = await myNetwork!.login(userName, userPass);
+    return json;
+  }
+
+  Future getReport(outletID, tglAwal, tglAkhir) async {
+    final json = await myNetwork!.getReport(outletID, tglAwal, tglAkhir);
+    return json;
+  }
+
+  Future getShift(barcode) async {
+    final json = await myNetwork!.getShift(barcode);
     return json;
   }
 }

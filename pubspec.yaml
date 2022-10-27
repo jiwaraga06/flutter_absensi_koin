@@ -44,6 +44,11 @@ dependencies:
   ticket_widget: ^0.0.1
   intl: ^0.17.0
   auto_size_text: ^3.0.0
+  syncfusion_flutter_pdf: ^20.3.50
+  path_provider: ^2.0.11
+  open_file: ^2.1.1
+  universal_html: ^2.0.8
+  flutter_html_to_pdf: ^0.7.0
 
 dev_dependencies:
   flutter_test:

@@ -9,10 +9,16 @@ class MyApi {
     return "$baseurl/CoinChange/Cek?CardID=$cardID";
   }
 
-  static tukar(cardID, shopName) {
-    return "$baseurl/CoinChange/Tukar?CardID=$cardID&ShopID=$shopName";
+  static tukar(cardID, shopID, shiftID) {
+    return "$baseurl/CoinChange/Tukar?CardID=$cardID&ShopID=$shopID&ShiftID=$shiftID";
   }
   static login(userName, userPass){
     return "$baseurl/CoinChange/CekLogin?UserName=$userName&UserPass=$userPass";
+  }
+  static getReport(outletID, tglAwal, tglAkhir){
+    return "https://api2.sipatex.co.id:2096/CoinChange/GetReport?OutletID=$outletID&AwalPeriode=$tglAwal&AkhirPeriode=$tglAkhir";
+  }
+  static getShift(barcode){
+    return "https://api2.sipatex.co.id:2096/CoinChange/GetShift?Barcode=$barcode";
   }
 }
