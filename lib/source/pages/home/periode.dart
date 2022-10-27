@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_absen_koin/source/data/cubit/generate_pdf_cubit.dart';
 import 'package:flutter_absen_koin/source/data/cubit/periode_cubit.dart';
 import 'package:flutter_absen_koin/source/pages/pdf/pdfContent.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -74,6 +75,24 @@ class _PeriodeState extends State<Periode> {
               ),
             ),
           ),
+          BlocListener<GeneratePdfCubit, GeneratePdfState>(
+            listener: (context, state) {
+              if (state is GeneratePdfMessage) {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (builder) {
+                      return Container(
+                        height: 50.0,
+                        color: Colors.green,
+                        child: Center(
+                          child: Text(state.message.toString(), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        ),
+                      );
+                    });
+              }
+            },
+            child: Container(),
+          ),
           BlocBuilder<PeriodeCubit, PeriodeState>(
             builder: (context, state) {
               if (state is PeriodeLoading) {
@@ -88,7 +107,7 @@ class _PeriodeState extends State<Periode> {
                 return Container();
               }
               var total = (state as PeriodeLoaded).total;
-              if(total!.isEmpty){
+              if (total!.isEmpty) {
                 return Container();
               }
               return Container(
@@ -174,7 +193,7 @@ class _PeriodeState extends State<Periode> {
                             onPressed: () {
                               // createPDF(total);
                               // generateExampleDocument(total, tanggalAwal, tanggalAkhir);
-                              BlocProvider.of<PeriodeCubit>(context).generatePDF(total[0], tanggalAwal, tanggalAkhir);
+                              BlocProvider.of<GeneratePdfCubit>(context).generatePDF(total[0], tanggalAwal, tanggalAkhir);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red[600],

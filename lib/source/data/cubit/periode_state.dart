@@ -11,5 +11,5 @@ class PeriodeLoaded extends PeriodeState {
   // final dynamic list;
   final dynamic total;
 
-  PeriodeLoaded({ this.total});
+  PeriodeLoaded({this.total});
 }

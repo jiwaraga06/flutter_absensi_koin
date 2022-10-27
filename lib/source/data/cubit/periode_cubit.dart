@@ -33,19 +33,6 @@ class PeriodeCubit extends Cubit<PeriodeState> {
     });
   }
 
-  void generatePDF(total, tglAwal, tglAkhir) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    var shopID = pref.getString("UserName");
-    final path = (await getExternalStorageDirectory())!.path;
-    final targetPath = path;
-    final targetFileName = "Report Koin $tglAwal - $tglAkhir";
-    final generatedPdfFile = await FlutterHtmlToPdf.convertFromHtmlContent(
-      PDFVIEW.htmlContent(total, tglAwal, tglAkhir, shopID),
-      targetPath,
-      targetFileName,
-    );
-    print(generatedPdfFile.uri);
-  }
 
   void clear() {
     emit(PeriodeLoaded( total: []));

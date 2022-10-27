@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_absen_koin/source/data/api/network.dart';
+import 'package:flutter_absen_koin/source/data/cubit/generate_pdf_cubit.dart';
 import 'package:flutter_absen_koin/source/data/cubit/koin_cubit.dart';
 import 'package:flutter_absen_koin/source/data/cubit/login_cubit.dart';
 import 'package:flutter_absen_koin/source/data/cubit/periode_cubit.dart';
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<PeriodeCubit>(
           create: (loginCubit) => PeriodeCubit(myRepository: myRepository),
+        ),
+        BlocProvider<GeneratePdfCubit>(
+          create: (loginCubit) => GeneratePdfCubit(),
         ),
       ],
       child: MaterialApp(
