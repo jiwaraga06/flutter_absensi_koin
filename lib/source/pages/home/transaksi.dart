@@ -7,6 +7,7 @@ import 'package:flutter_absen_koin/source/router/string.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:slide_digital_clock/slide_digital_clock.dart';
 import 'package:ticket_widget/ticket_widget.dart';
 
 class Transaksi extends StatefulWidget {
@@ -48,15 +49,29 @@ class _TransaksiState extends State<Transaksi> {
             },
             icon: Icon(
               FontAwesomeIcons.circleXmark,
-              color: Colors.black,
-              size: 25,
+              color: Colors.white,
+              size: 22,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextButton(onPressed: (){
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, CHANGE_PASS_OUTLET);
+            },
+            icon: Icon(
+              FontAwesomeIcons.key,
+              color: Colors.white,
+              size: 22,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
               Navigator.pushNamed(context, PERIODE);
-            }, child: Text("Periode", style: TextStyle(color: Colors.white),)),
+            },
+            icon: Icon(
+              FontAwesomeIcons.calendar,
+              color: Colors.white,
+              size: 22,
+            ),
           ),
         ],
       ),
@@ -67,6 +82,18 @@ class _TransaksiState extends State<Transaksi> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: DigitalClock(
+                    is24HourTimeFormat: true,
+                    areaDecoration: const BoxDecoration(color: Colors.transparent),
+                    hourMinuteDigitTextStyle: const TextStyle(color: Colors.black, fontSize: 50),
+                    hourMinuteDigitDecoration: const BoxDecoration(color: Colors.transparent),
+                    secondDigitDecoration: const BoxDecoration(color: Colors.transparent),
+                    secondDigitTextStyle: const TextStyle(color: Colors.black, fontSize: 50),
+                  ),
+                ),
+                const SizedBox(height: 8),
                 SizedBox(
                   width: 350,
                   child: TextFormField(
@@ -76,7 +103,7 @@ class _TransaksiState extends State<Transaksi> {
                     cursorColor: Colors.white,
                     style: const TextStyle(
                       fontSize: 20,
-                      // color: Colors.white,
+                      color: Colors.white,
                     ),
                     decoration: const InputDecoration(border: InputBorder.none),
                     onChanged: (value) async {
@@ -140,7 +167,7 @@ class _TransaksiState extends State<Transaksi> {
   Widget ticket(nama, koin_makan, masa_berlaku, masa_berlaku_akhir, tanggal_penukaran, status_berlaku, barcode, shift, status) {
     return TicketWidget(
       width: 450,
-      height: 450,
+      height: 550,
       padding: const EdgeInsets.all(18),
       isCornerRounded: true,
       color: Color(0XFFFCF8E8),

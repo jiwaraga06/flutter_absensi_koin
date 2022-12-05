@@ -31,4 +31,10 @@ class MyRepository {
     final json = await myNetwork!.getShift(barcode);
     return json;
   }
+
+  Future changePassOutlet(outletID, oldPassword, newPassword) async {
+    final json = await myNetwork!.changePassOutlet(outletID, oldPassword, newPassword);
+    return json;
+  }
+
 }

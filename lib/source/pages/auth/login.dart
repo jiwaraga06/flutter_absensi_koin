@@ -113,7 +113,7 @@ class _LoginState extends State<Login> {
                     const SizedBox(height: 20),
                     SizedBox(
                       width: 300,
-                      height: 50,
+                      height: 45,
                       child: OutlinedButton(
                         onPressed: () {
                           submit();
@@ -126,7 +126,8 @@ class _LoginState extends State<Login> {
                             )),
                         child: const Text("Submit", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500)),
                       ),
-                    )
+                    ),
+                   
                   ],
                 ),
               ),

@@ -17,7 +17,7 @@ class ProsesTransaksiCubit extends Cubit<ProsesTransaksiState> {
     await Future.delayed(Duration(milliseconds: 650));
     myRepository!.cekKoin(cardID).then((value) async {
       var json = jsonDecode(value.body);
-      print(json);
+      print('COMPARE TGL:  $json');
       if (json.length != 0) {
         if (crID == 1) {
           emit(ProsesTransaksiLoaded(result: json[0], statusKoin: pesan, tgl_penukaran: json[0]['waktu_penukaran'], status: 1));
@@ -29,9 +29,7 @@ class ProsesTransaksiCubit extends Cubit<ProsesTransaksiState> {
           emit(ProsesTransaksiLoaded(result: json[0], statusKoin: pesan, tgl_penukaran: "-", status: 4));
         } else if (crID == 4) {
           emit(ProsesTransaksiLoaded(result: json[0], statusKoin: pesan, tgl_penukaran: "-", status: 9));
-        } else if (crID == 9) {
-          emit(ProsesTransaksiMessage(message: pesan));
-        }
+        } 
         await Future.delayed(Duration(seconds: 3));
         emit(ProsesTransaksiLoaded(result: [], status: 0, statusKoin: "", tgl_penukaran: ""));
         // var dateTimekoin = json[0]['masa_berlaku_min'];
@@ -53,8 +51,15 @@ class ProsesTransaksiCubit extends Cubit<ProsesTransaksiState> {
         //   print("sesudah");
         // }
       } else {
-        emit(ProsesTransaksiMessage(message: "Data tidak ditemukan"));
+        if (crID == 9) {
+          emit(ProsesTransaksiMessage(message: pesan));
+          await Future.delayed(Duration(seconds: 3));
+          emit(ProsesTransaksiMessage(message: ''));
+        }
       }
+      // else {
+      //   emit(ProsesTransaksiMessage(message: "Data tidak ditemukan"));
+      // }
     });
   }
 

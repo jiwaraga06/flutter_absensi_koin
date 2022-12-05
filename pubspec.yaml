@@ -49,6 +49,7 @@ dependencies:
   open_file: ^2.1.1
   universal_html: ^2.0.8
   flutter_html_to_pdf: ^0.7.0
+  slide_digital_clock: ^1.0.2
 
 dev_dependencies:
   flutter_test:

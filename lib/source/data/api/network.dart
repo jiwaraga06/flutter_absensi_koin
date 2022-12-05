@@ -53,6 +53,7 @@ class MyNetwork {
       print("ERROR API Get Report : $e");
     }
   }
+
   Future getShift(cardID) async {
     try {
       var url = Uri.parse(MyApi.getShift(cardID));
@@ -66,4 +67,16 @@ class MyNetwork {
     }
   }
 
+  Future changePassOutlet(outletID, oldPassword, newPassword) async {
+    try {
+      var url = Uri.parse(MyApi.changePassOutlet(outletID, oldPassword, newPassword));
+      var response = await http.post(
+        url,
+        headers: {'Authorization': 'Bearer ${MyApi.token()}'},
+      );
+      return response;
+    } catch (e) {
+      print("ERROR API ChangePassOutlet");
+    }
+  }
 }

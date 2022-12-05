@@ -21,4 +21,7 @@ class MyApi {
   static getShift(barcode){
     return "https://api2.sipatex.co.id:2096/CoinChange/GetShift?Barcode=$barcode";
   }
+  static changePassOutlet(outletID, oldPassword, newPassword){
+    return "https://api2.sipatex.co.id:2096/CoinChange/ChangePass1?OutletID=$outletID&OldPassword=$oldPassword&NewPassword=$newPassword";
+  }
 }
