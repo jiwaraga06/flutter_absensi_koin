@@ -12,16 +12,19 @@ class MyApi {
   static tukar(cardID, shopID, shiftID) {
     return "$baseurl/CoinChange/Tukar?CardID=$cardID&ShopID=$shopID&ShiftID=$shiftID";
   }
+  static tukarKantin(cardID, shiftID) {
+    return "$baseurl/CoinChange/TukarKantin?CardID=$cardID&ShiftID=$shiftID";
+  }
   static login(userName, userPass){
     return "$baseurl/CoinChange/CekLogin?UserName=$userName&UserPass=$userPass";
   }
   static getReport(outletID, tglAwal, tglAkhir){
-    return "https://api2.sipatex.co.id:2096/CoinChange/GetReport?OutletID=$outletID&AwalPeriode=$tglAwal&AkhirPeriode=$tglAkhir";
+    return "$baseurl/CoinChange/GetReport?OutletID=$outletID&AwalPeriode=$tglAwal&AkhirPeriode=$tglAkhir";
   }
   static getShift(barcode){
-    return "https://api2.sipatex.co.id:2096/CoinChange/GetShift?Barcode=$barcode";
+    return "$baseurl/CoinChange/GetShift?Barcode=$barcode";
   }
   static changePassOutlet(outletID, oldPassword, newPassword){
-    return "https://api2.sipatex.co.id:2096/CoinChange/ChangePass1?OutletID=$outletID&OldPassword=$oldPassword&NewPassword=$newPassword";
+    return "$baseurl/CoinChange/ChangePass1?OutletID=$outletID&OldPassword=$oldPassword&NewPassword=$newPassword";
   }
 }

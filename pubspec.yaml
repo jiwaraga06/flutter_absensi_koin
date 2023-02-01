@@ -50,6 +50,8 @@ dependencies:
   universal_html: ^2.0.8
   flutter_html_to_pdf: ^0.7.0
   slide_digital_clock: ^1.0.2
+  printing: ^5.9.3
+  flutter_usb_printer: ^0.1.0+1
 
 dev_dependencies:
   flutter_test:

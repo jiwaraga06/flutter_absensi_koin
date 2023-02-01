@@ -6,11 +6,14 @@ import 'package:flutter_absen_koin/source/pages/auth/splash_screen.dart';
 import 'package:flutter_absen_koin/source/pages/home/periode.dart';
 import 'package:flutter_absen_koin/source/pages/home/proses_transaksi.dart';
 import 'package:flutter_absen_koin/source/pages/home/transaksi.dart';
+import 'package:flutter_absen_koin/source/pages/tesPrint.dart';
 import 'package:flutter_absen_koin/source/router/string.dart';
 
 class RouterNavigation {
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case TEST_PRINT:
+        return MaterialPageRoute(builder: (context) => const TestPrint());
       case SPLASH_SCREEN:
         return MaterialPageRoute(builder: (context) => const SplashScreen());
       case LOGIN:

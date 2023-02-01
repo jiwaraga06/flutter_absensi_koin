@@ -14,7 +14,7 @@ class ProsesTransaksiCubit extends Cubit<ProsesTransaksiState> {
 
   void compareTanggal(cardID, pesan, crID) async {
     emit(ProsesTransaksiLoading());
-    await Future.delayed(Duration(milliseconds: 650));
+    // await Future.delayed(Duration(milliseconds: 650));
     myRepository!.cekKoin(cardID).then((value) async {
       var json = jsonDecode(value.body);
       print('COMPARE TGL:  $json');
@@ -27,9 +27,9 @@ class ProsesTransaksiCubit extends Cubit<ProsesTransaksiState> {
           emit(ProsesTransaksiLoaded(result: json[0], statusKoin: pesan, tgl_penukaran: "-", status: 3));
         } else if (crID == 4) {
           emit(ProsesTransaksiLoaded(result: json[0], statusKoin: pesan, tgl_penukaran: "-", status: 4));
-        } else if (crID == 4) {
+        } else if (crID == 9) {
           emit(ProsesTransaksiLoaded(result: json[0], statusKoin: pesan, tgl_penukaran: "-", status: 9));
-        } 
+        }
         await Future.delayed(Duration(seconds: 3));
         emit(ProsesTransaksiLoaded(result: [], status: 0, statusKoin: "", tgl_penukaran: ""));
         // var dateTimekoin = json[0]['masa_berlaku_min'];
@@ -67,26 +67,50 @@ class ProsesTransaksiCubit extends Cubit<ProsesTransaksiState> {
     await Future.delayed(Duration(seconds: 1));
     SharedPreferences pref = await SharedPreferences.getInstance();
     var shopID = pref.getInt("ShopID");
+    var username = pref.getString('UserName');
     print("SHOP ID: " + shopID.toString());
     myRepository!.getShift(cardID).then((value) {
       var json = jsonDecode(value.body);
+      print('JSON: $json');
       var kodeShfit = json[0]['KodeShift'];
       if (json.length != 0) {
-        myRepository!.tukarKoin(cardID, shopID, kodeShfit).then((value) {
-          var jsonTukar = jsonDecode(value.body);
-          print("TUKAR KOIN :  $jsonTukar");
-          if (jsonTukar[0]['crID'] == 1) {
-            compareTanggal(cardID, "Koin Bisa di Gunakan", jsonTukar[0]['crID']);
-          } else if (jsonTukar[0]['crID'] == 2) {
-            compareTanggal(cardID, "Koin Sudah di Pakai", jsonTukar[0]['crID']);
-          } else if (jsonTukar[0]['crID'] == 3) {
-            compareTanggal(cardID, "Koin Belum Bisa di Pakai", jsonTukar[0]['crID']);
-          } else if (jsonTukar[0]['crID'] == 4) {
-            compareTanggal(cardID, "Koin Kadaluwarsa", jsonTukar[0]['crID']);
-          } else if (jsonTukar[0]['crID'] == 9) {
-            compareTanggal(cardID, "Karyawan Belum Absen", jsonTukar[0]['crID']);
-          }
-        });
+        if (username == 'Koperasi') {
+          print('TUKAR DI KOPERASI');
+          // KOPERASI
+          myRepository!.tukarKoin(cardID, shopID, kodeShfit).then((value) {
+            var jsonTukar = jsonDecode(value.body);
+            print("TUKAR KOIN :  $jsonTukar");
+            if (jsonTukar[0]['crID'] == 1) {
+              compareTanggal(cardID, "Koin Bisa di Gunakan", jsonTukar[0]['crID']);
+            } else if (jsonTukar[0]['crID'] == 2) {
+              compareTanggal(cardID, "Koin Sudah di Pakai", jsonTukar[0]['crID']);
+            } else if (jsonTukar[0]['crID'] == 3) {
+              compareTanggal(cardID, "Koin Belum Bisa di Pakai", jsonTukar[0]['crID']);
+            } else if (jsonTukar[0]['crID'] == 4) {
+              compareTanggal(cardID, "Koin Kadaluwarsa", jsonTukar[0]['crID']);
+            } else if (jsonTukar[0]['crID'] == 9) {
+              compareTanggal(cardID, "Karyawan Belum Absen", jsonTukar[0]['crID']);
+            }
+          });
+        } else {
+          print('TUKAR DI KANTIN');
+          // KANTIN
+          myRepository!.tukarKantin(cardID, kodeShfit).then((value) {
+            var jsonTukar = jsonDecode(value.body);
+            print("TUKAR KOIN :  $jsonTukar");
+            if (jsonTukar[0]['crID'] == 1) {
+              compareTanggal(cardID, "Koin Bisa di Gunakan", jsonTukar[0]['crID']);
+            } else if (jsonTukar[0]['crID'] == 2) {
+              compareTanggal(cardID, "Koin Sudah di Pakai", jsonTukar[0]['crID']);
+            } else if (jsonTukar[0]['crID'] == 3) {
+              compareTanggal(cardID, "Koin Belum Bisa di Pakai", jsonTukar[0]['crID']);
+            } else if (jsonTukar[0]['crID'] == 4) {
+              compareTanggal(cardID, "Koin Kadaluwarsa", jsonTukar[0]['crID']);
+            } else if (jsonTukar[0]['crID'] == 9) {
+              compareTanggal(cardID, "Karyawan Belum Absen", jsonTukar[0]['crID']);
+            }
+          });
+        }
       }
     });
   }

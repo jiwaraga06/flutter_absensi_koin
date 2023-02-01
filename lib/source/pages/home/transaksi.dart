@@ -19,6 +19,60 @@ class Transaksi extends StatefulWidget {
 
 class _TransaksiState extends State<Transaksi> {
   TextEditingController controllerBarcode = TextEditingController();
+  TextEditingController controllerLogout = TextEditingController();
+  final formkey = GlobalKey<FormState>();
+  void logout() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Alert'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Form(
+                  key: formkey,
+                  child: TextFormField(
+                    controller: controllerLogout,
+                    decoration: InputDecoration(
+                      hintText: 'Masukan Password untuk logout',
+                      labelText: 'Password',
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Kolom harus di isi";
+                      }
+                      if (value != 'PASSWORD') {
+                        return "Kolom yang dimasukan salah";
+                      }
+                      return null;
+                    },
+                  )),
+            ],
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Tidak')),
+            TextButton(
+                onPressed: () {
+                  if (formkey.currentState!.validate()) {
+                    if (controllerLogout.text == 'PASSWORD') {
+                      BlocProvider.of<LoginCubit>(context).keluar(context);
+                      BlocProvider.of<ProsesTransaksiCubit>(context).clearData();
+                    }
+                  }
+                },
+                child: Text('Iya')),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<LoginCubit>(context).getShopName();
@@ -36,7 +90,7 @@ class _TransaksiState extends State<Transaksi> {
               return Text("");
             }
             return Text(
-              userName,
+              userName == "Koperasi" ? "Koperasi" : "Kantin",
               style: GoogleFonts.lato(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w600),
             );
           },
@@ -44,8 +98,7 @@ class _TransaksiState extends State<Transaksi> {
         actions: [
           IconButton(
             onPressed: () {
-              BlocProvider.of<LoginCubit>(context).keluar(context);
-              BlocProvider.of<ProsesTransaksiCubit>(context).clearData();
+              logout();
             },
             icon: Icon(
               FontAwesomeIcons.circleXmark,
@@ -110,7 +163,7 @@ class _TransaksiState extends State<Transaksi> {
                       if (value.length >= 9) {
                         // BlocProvider.of<ProsesTransaksiCubit>(context).compareTanggal(controllerBarcode.text);
                         BlocProvider.of<ProsesTransaksiCubit>(context).tukarKoin(controllerBarcode.text);
-                        await Future.delayed(Duration(seconds: 1));
+                        await Future.delayed(Duration(milliseconds: 500));
                         controllerBarcode.clear();
                       }
                     },
@@ -153,6 +206,7 @@ class _TransaksiState extends State<Transaksi> {
                       data['CardIdNo'],
                       data['shift'],
                       status,
+                      data['t4_penukaran'],
                     );
                   },
                 ),
@@ -164,7 +218,7 @@ class _TransaksiState extends State<Transaksi> {
     );
   }
 
-  Widget ticket(nama, koin_makan, masa_berlaku, masa_berlaku_akhir, tanggal_penukaran, status_berlaku, barcode, shift, status) {
+  Widget ticket(nama, koin_makan, masa_berlaku, masa_berlaku_akhir, tanggal_penukaran, status_berlaku, barcode, shift, status, tempat_penukaran) {
     return TicketWidget(
       width: 450,
       height: 550,
@@ -318,6 +372,26 @@ class _TransaksiState extends State<Transaksi> {
                         style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ]),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Tempat Penukaran",
+                      style: TextStyle(color: Colors.grey, fontSize: 15),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      tempat_penukaran == null
+                          ? '-'
+                          : tempat_penukaran == "1"
+                              ? "Koperasi"
+                              : "Kantin",
+                      style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
                   ],
                 ),
               ],

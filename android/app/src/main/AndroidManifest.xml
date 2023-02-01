@@ -2,7 +2,7 @@
     package="com.flutter_absen_koin.flutter_absen_koin">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="Koin"
+        android:label="KoinKantin"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

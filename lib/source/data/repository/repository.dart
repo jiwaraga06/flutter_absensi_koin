@@ -17,6 +17,11 @@ class MyRepository {
     return json;
   }
 
+  Future tukarKantin(cardID, shiftID) async {
+    final json = await myNetwork!.tukarKantin(cardID, shiftID);
+    return json;
+  }
+
   Future login(userName, userPass) async {
     final json = await myNetwork!.login(userName, userPass);
     return json;
@@ -36,5 +41,4 @@ class MyRepository {
     final json = await myNetwork!.changePassOutlet(outletID, oldPassword, newPassword);
     return json;
   }
-
 }

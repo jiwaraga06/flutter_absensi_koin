@@ -27,6 +27,18 @@ class MyNetwork {
       print("ERROR API TUKAR KOIN : $e");
     }
   }
+  Future tukarKantin(cardID, shiftID) async {
+    try {
+      var url = Uri.parse(MyApi.tukarKantin(cardID, shiftID));
+      var response = await http.post(
+        url,
+        headers: {'Authorization': 'Bearer ${MyApi.token()}'},
+      );
+      return response;
+    } catch (e) {
+      print("ERROR API TUKAR KANTIN : $e");
+    }
+  }
 
   Future login(userName, userPass) async {
     try {
